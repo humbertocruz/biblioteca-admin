@@ -1,22 +1,48 @@
 {
-  "name": "pricebook-admin",
-  "version": "0.1.0",
+  "name": "biblioteca-admin",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate",
+    "deploy": "vc"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.1.1",
+    "@chakra-ui/next-js": "^2.2.0",
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@prisma/client": "^5.18.0",
+    "date-fns": "^3.6.0",
+    "dayjs": "^1.11.10",
+    "framer-motion": "^11.0.3",
+    "next": "14.2.3",
+    "password-hash": "^1.2.2",
     "react": "^18",
+    "react-datepicker": "^6.4.0",
     "react-dom": "^18",
-    "next": "14.2.5"
+    "react-icons": "^5.0.1",
+    "react-input-mask": "^2.0.4",
+    "recoil": "^0.7.7",
+    "recoil-persist": "^5.1.0",
+    "swr": "^2.2.4",
+    "underscore": "^1.13.6",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
+    "@types/password-hash": "^1.2.24",
     "@types/react": "^18",
-    "@types/react-dom": "^18"
+    "@types/react-datepicker": "^6.2.0",
+    "@types/react-dom": "^18",
+    "@types/react-input-mask": "^3.0.5",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.0",
+    "prisma": "^5.18.0",
+    "typescript": "^5"
   }
 }

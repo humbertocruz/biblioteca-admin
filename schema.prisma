@@ -1,0 +1,279 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Point {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  points    Float    @default(0)
+  barcode   String
+  userId    String
+  region    Region   @default(DF)
+  migration Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "userId")
+}
+
+model Group {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  name      String
+  migration Boolean   @default(true)
+  product   Product[]
+}
+
+model Product {
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  name       String?
+  barcode    String   @unique
+  photo      Boolean  @default(false)
+  cloudinary Boolean  @default(false)
+  photoUrl   String?
+  groupId    String?
+  migration  Boolean  @default(false)
+  checked    Boolean  @default(false)
+  group      Group?   @relation(fields: [groupId], references: [id])
+  scans      Scan[]
+  stars      Star[]
+
+  @@index([groupId], map: "groupId")
+}
+
+model Scan {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  userId    String
+  productId String
+  region    Region   @default(DF)
+  abuse     Boolean  @default(false)
+  abuseName String?
+  promotion Boolean  @default(false)
+  price     Float
+  quantity  Int      @default(1)
+  desc      String?
+  migration Boolean  @default(false)
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([productId], map: "productId")
+  @@index([userId], map: "userId")
+}
+
+model Note {
+  id        String   @id
+  createdAt DateTime @default(now())
+  code      String
+  date      DateTime
+  userId    String
+  value     Int
+  migration Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "userId")
+}
+
+model Star {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  stars     Int
+  productId String
+  userId    String
+  migration Boolean  @default(false)
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([productId], map: "productId")
+  @@index([userId], map: "userId")
+}
+
+model Token {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  token     String   @unique
+  userId    String
+  valid     Boolean  @default(true)
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "userId")
+}
+
+model SubToken {
+  id           String     @id @default(uuid())
+  createdAt    DateTime   @default(now())
+  token        String     @unique
+  subscriberId String
+  valid        Boolean    @default(true)
+  subscriber   Subscriber @relation(fields: [subscriberId], references: [id])
+
+  @@index([subscriberId], map: "SubToken_subscriberId_fkey")
+}
+
+model Payment {
+  id           String     @id @default(uuid())
+  createdAt    DateTime   @default(now())
+  subscriberId String
+  value        Float
+  method       String
+  status       String
+  paymentId    String     @unique
+  plan         String
+  dueDate      DateTime?
+  qrcode       String?    @db.Text
+  subscriber   Subscriber @relation(fields: [subscriberId], references: [id])
+
+  @@index([subscriberId], map: "Payment_subscriberId_fkey")
+}
+
+model Subscriber {
+  id                String     @id @default(uuid())
+  createdAt         DateTime   @default(now())
+  password          String?    @default("")
+  contact_name      String?
+  name              String?
+  fantasy_name      String?
+  cnpj              String     @unique
+  segment           Segment?
+  email             String     @unique
+  phone             String?
+  phone_comercial   String?
+  cell              String?
+  confirmationToken String?
+  address           String?
+  cep               String?
+  region            Region     @default(DF)
+  municipioId       String?    @default("5300108")
+  municipioName     String?    @default("Brasília")
+  subscription      DateTime   @default(now())
+  free              Boolean    @default(true)
+  customerId        String?
+  complement        String?
+  number            String?
+  passCode          String?
+  payments          Payment[]
+  token             SubToken[]
+  logs              Log[]
+}
+
+model User {
+  id                String    @id @default(uuid())
+  createdAt         DateTime  @default(now())
+  name              String?
+  email             String    @unique
+  password          String?   @default("")
+  birthdate         DateTime?
+  verified          Boolean   @default(false)
+  passCode          String?
+  token             String?   @default(uuid())
+  terms             Boolean   @default(false)
+  phone             String?
+  gender            Gender?   @default(MALE)
+  region            Region    @default(DF)
+  role              Role      @default(USER)
+  migration         Boolean   @default(true)
+  premium           Boolean   @default(false)
+  municipioId       String?   @default("5300108")
+  municipioName     String?   @default("Brasília")
+  confirmedLocation Boolean   @default(false)
+  keys              Key[]
+  notes             Note[]
+  points            Point[]
+  scans             Scan[]
+  stars             Star[]
+  tokens            Token[]
+
+  @@index([role], map: "role")
+}
+
+model Key {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  key       String   @unique
+  content   String
+  userId    String
+  error     Boolean  @default(false)
+  checked   Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "userId")
+}
+
+model Market {
+  id           String   @id @default(uuid())
+  name         String
+  code         String
+  city         String
+  fantasy_name String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Region {
+  AC
+  AL
+  AP
+  AM
+  BA
+  CE
+  DF
+  ES
+  GO
+  MA
+  MT
+  MS
+  MG
+  PA
+  PB
+  PR
+  PE
+  PI
+  RJ
+  RN
+  RS
+  RO
+  RR
+  SC
+  SP
+  SE
+  TO
+}
+
+enum Role {
+  SUPER
+  ADMIN
+  USER
+}
+
+enum Segment {
+  SUPERMERCADO
+  ATACADO
+  ATACAREJO
+  MERCEARIA
+  DISTRIBUIDOR
+  RESTAURANTE
+  PETS
+  FARMACIA
+  OUTROS
+}
+
+model Log {
+  id            String    @id @default(uuid())
+  createdAt     DateTime  @default(now())
+  subscriberId  String
+  action        String
+  data          String
+  subscriber    Subscriber   @relation(fields: [subscriberId], references: [id])
+  migration     Boolean   @default(false)
+  @@index([subscriberId, action], map: "subscriberId")
+}
