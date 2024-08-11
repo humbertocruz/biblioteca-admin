@@ -2,14 +2,14 @@
 import { Box, Button, calc, Center, Heading, HStack, IconButton, Table,Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import useSWR from 'swr';
 import dayjs from 'dayjs';
-import { FaArrowLeft, FaArrowRight, FaDollarSign, FaEye, FaTrash } from 'react-icons/fa';
+import { FaDollarSign, FaEye, FaTrash } from 'react-icons/fa';
 import { useState } from "react";
 import PaginationComponent from "../components/pagination";
 
 export default function Home() {
   const [page, setPage] = useState(0)
   const fetcher = (url:string) => fetch(url).then((res) => res.json());
-  const { data, error, isLoading } = useSWR(`/api/logs?page=${page}&take=20`, fetcher);
+  const { data, error, isLoading } = useSWR(`/api/logs?page=${page}&take=5`, fetcher);
   
   return (
     <Box w={'100%'}>
@@ -17,7 +17,7 @@ export default function Home() {
       {isLoading ? <Center h={'80vh'}>Carregando...</Center>:
       <Table variant={'striped'}>
         <Thead>
-          <PaginationComponent total={data.counter} setPage={setPage} page={page} />
+          <PaginationComponent perPage={5} total={data.counter} setPage={setPage} page={page} />
           <Tr>
             <Th>Criado em</Th>
             <Th>Assinante</Th>
