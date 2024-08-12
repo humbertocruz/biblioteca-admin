@@ -9,7 +9,7 @@ import PaginationComponent from "../components/pagination";
 export default function Home() {
   const [page, setPage] = useState(0)
   const fetcher = (url:string) => fetch(url).then((res) => res.json());
-  const { data, error, isLoading } = useSWR(`/api/logs?page=${page}&take=5`, fetcher);
+  const { data, error, isLoading } = useSWR(`/api/logs?page=${page}&take=10`, fetcher);
   
   return (
     <Box w={'100%'}>
@@ -17,28 +17,38 @@ export default function Home() {
       {isLoading ? <Center h={'80vh'}>Carregando...</Center>:
       <Table variant={'striped'}>
         <Thead>
-          <PaginationComponent perPage={5} total={data.counter} setPage={setPage} page={page} />
+          <PaginationComponent perPage={10} total={data.counter} setPage={setPage} page={page} />
           <Tr>
             <Th>Criado em</Th>
             <Th>Assinante</Th>
+            <Th>Tipo</Th>
             <Th>Ações</Th>
           </Tr>
         </Thead>
         <Tbody>
           {data?.data.map((item:any, i:number) => {
-            const vencido = !item.subscription || dayjs(item.subscription).isAfter(dayjs())
+            const { dateRangeStart, dateRangeEnd, groupId } = item.data
             return (
+            <>
             <Tr key={'subscriber_'+i}>
               <Td>{dayjs(item.createdAt).format('DD/MM/YYYY HH:mm')}</Td>
-              <Td>Assinante</Td>
+              <Td>{item.subscriber.name}</Td>
+              <Td>{item.action}</Td>
               <Td>
                 <HStack>
                   <IconButton aria-label="Ver" colorScheme="orange" size={'sm'} icon={<FaEye />} />
                   <IconButton aria-label="Pagamentos" colorScheme={'orange'} size={'sm'} icon={<FaDollarSign />} />
-                  <IconButton aria-label="Remover" colorScheme={'red'} size={'sm'} icon={<FaTrash />} />
                 </HStack>
               </Td>
             </Tr>
+            <Tr>
+              <Td p={10} colSpan={4} bg={'orange.100'}>
+                  {dayjs(dateRangeStart).format('DD/MM/YYYY HH:mm')}
+                  {dayjs(dateRangeEnd).format('DD/MM/YYYY HH:mm')}
+                  {groupId}
+              </Td>
+            </Tr>
+            </>
           )
     })}
         </Tbody>

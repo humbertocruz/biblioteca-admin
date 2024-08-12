@@ -14,8 +14,15 @@ export async function GET(request: NextRequest, response: NextResponse) {
       createdAt: 'desc'
     },
     take: take?parseInt(take):10,
-    skip: page?parseInt(page)*parseInt(take):0
-  })
+    skip: page?parseInt(page)*parseInt(take):0,
+    select: {
+      id: true,
+      createdAt: true,
+      subscriber: true,
+      action: true,
+      data: true
+    }
+  });
   const counter = await prisma.log.count()
   return Response.json({ data,counter })
 }

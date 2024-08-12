@@ -272,7 +272,7 @@ model Log {
   createdAt     DateTime  @default(now())
   subscriberId  String
   action        String
-  data          String
+  data          Json
   subscriber    Subscriber   @relation(fields: [subscriberId], references: [id])
   migration     Boolean   @default(false)
   @@index([subscriberId, action], map: "subscriberId")
