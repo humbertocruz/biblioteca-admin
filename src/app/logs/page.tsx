@@ -27,7 +27,7 @@ export default function Home() {
         </Thead>
         <Tbody>
           {data?.data.map((item:any, i:number) => {
-            const { dateRangeStart, dateRangeEnd, groupId } = item.data
+            const { dateRangeStart, dateRangeEnd, groupId } = JSON.parse(item.data)
             return (
             <>
             <Tr key={'subscriber_'+i}>
