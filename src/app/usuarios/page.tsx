@@ -1,8 +1,8 @@
 'use client'
-import { Box, Center, Heading, HStack, IconButton, Table,Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Box, Center, Heading, HStack, IconButton, Table,Tbody, Td, Tfoot, Th, Thead, Tr } from "@chakra-ui/react";
 import useSWR from 'swr';
 import dayjs from 'dayjs';
-import { FaDollarSign, FaEye, FaTrash } from 'react-icons/fa';
+import { FaDollarSign, FaEdit, FaEye, FaPlus, FaTrash } from 'react-icons/fa';
 
 export default function Home() {
   const fetcher = (url:string) => fetch(url).then((res) => res.json());
@@ -34,7 +34,7 @@ export default function Home() {
               <Td color={dayjs(item.subscription).isAfter(dayjs())?'green':'red'}>{item.subscription?dayjs(item.subscription).format('DD/MM/YYYY'):'xx-xx-xx'}</Td>
               <Td>
                 <HStack>
-                  <IconButton aria-label="Ver" colorScheme="orange" size={'sm'} icon={<FaEye />} />
+                  <IconButton aria-label="Ver" colorScheme="orange" size={'sm'} icon={<FaEdit />} />
                   <IconButton aria-label="Pagamentos" colorScheme={'orange'} size={'sm'} icon={<FaDollarSign />} />
                   <IconButton aria-label="Remover" colorScheme={'red'} size={'sm'} icon={<FaTrash />} />
                 </HStack>
@@ -43,6 +43,9 @@ export default function Home() {
           )
     })}
         </Tbody>
+        <Tfoot>
+          <IconButton as={'a'} href="/usuarios/novo" aria-label="Novo" colorScheme="orange" size={'sm'} icon={<FaPlus />} />
+        </Tfoot>
       </Table>
       }
     </Box>

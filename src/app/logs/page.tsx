@@ -1,19 +1,29 @@
 'use client'
-import { Box, Button, calc, Center, Heading, HStack, IconButton, Table,Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Box, Center, Heading, HStack, IconButton, Table,Tbody, Td, Th, Thead, Tr, Text } from "@chakra-ui/react";
 import useSWR from 'swr';
 import dayjs from 'dayjs';
-import { FaDollarSign, FaEye, FaTrash } from 'react-icons/fa';
+import { FaDollarSign, FaDownload, FaEye } from 'react-icons/fa';
 import { useState } from "react";
 import PaginationComponent from "../components/pagination";
+import { CSVLink } from "react-csv";
 
 export default function Home() {
   const [page, setPage] = useState(0)
   const fetcher = (url:string) => fetch(url).then((res) => res.json());
   const { data, error, isLoading } = useSWR(`/api/logs?page=${page}&take=10`, fetcher);
-  
+  const {data:data_download} = useSWR(`/api/logs?page=0&take=100000`, fetcher);
   return (
     <Box w={'100%'}>
       <Center><Heading my={10}>Logs</Heading></Center>
+      {data_download && <IconButton position={'absolute'} right={2} as={CSVLink}
+        data={data_download.data}
+        //headers={headers}
+        filename={'pagamentos.csv'}
+        colorScheme="orange"
+        size={'sm'}
+        aria-label="Exportar"
+        icon={<FaDownload />}
+      />}
       {isLoading ? <Center h={'80vh'}>Carregando...</Center>:
       <Table variant={'striped'}>
         <Thead>
@@ -27,7 +37,7 @@ export default function Home() {
         </Thead>
         <Tbody>
           {data?.data.map((item:any, i:number) => {
-            const { dateRangeStart, dateRangeEnd, groupId } = JSON.parse(item.data)
+            const { dateRangeStart, dateRangeEnd, region } = JSON.parse(item.data)
             return (
             <>
             <Tr key={'subscriber_'+i}>
@@ -41,13 +51,12 @@ export default function Home() {
                 </HStack>
               </Td>
             </Tr>
-            <Tr>
-              <Td p={10} colSpan={4} bg={'orange.100'}>
-                  {dayjs(dateRangeStart).format('DD/MM/YYYY HH:mm')}
-                  {dayjs(dateRangeEnd).format('DD/MM/YYYY HH:mm')}
-                  {groupId}
+            {item.action=='Consulta' && <Tr>
+              <Td p={4} colSpan={4}>
+                  <Text>De: {dayjs(dateRangeStart).format('DD/MM/YYYY HH:mm')} - Até: {dayjs(dateRangeEnd).format('DD/MM/YYYY HH:mm')}</Text>
+                  <Text>Região: {region}</Text>
               </Td>
-            </Tr>
+            </Tr>}
             </>
           )
     })}
