@@ -12,6 +12,18 @@ export default function Home() {
   const fetcher = (url:string) => fetch(url).then((res) => res.json());
   const { data, error, isLoading } = useSWR(`/api/logs?page=${page}&take=10`, fetcher);
   const {data:data_download} = useSWR(`/api/logs?page=0&take=100000`, fetcher);
+  const LogActions = (action:string) => {
+    switch (action) {
+      case 'Payment':
+        return 'Pagamento'
+      case 'Consulta':
+        return 'Consulta'
+      case 'Login':
+        return 'Login'
+      default:
+        return 'Desconhecido'
+    }
+  }
   return (
     <Box w={'100%'}>
       <Center><Heading my={10}>Logs</Heading></Center>
@@ -37,13 +49,13 @@ export default function Home() {
         </Thead>
         <Tbody>
           {data?.data.map((item:any, i:number) => {
-            const { dateRangeStart, dateRangeEnd, region } = JSON.parse(item.data)
+            const { dateRangeStart, dateRangeEnd, region } = item.data
             return (
             <>
             <Tr key={'subscriber_'+i}>
               <Td>{dayjs(item.createdAt).format('DD/MM/YYYY HH:mm')}</Td>
               <Td>{item.subscriber.name}</Td>
-              <Td>{item.action}</Td>
+              <Td>{LogActions(item.action)}</Td>
               <Td>
                 <HStack>
                   <IconButton aria-label="Ver" colorScheme="orange" size={'sm'} icon={<FaEye />} />
@@ -55,6 +67,12 @@ export default function Home() {
               <Td p={4} colSpan={4}>
                   <Text>De: {dayjs(dateRangeStart).format('DD/MM/YYYY HH:mm')} - Até: {dayjs(dateRangeEnd).format('DD/MM/YYYY HH:mm')}</Text>
                   <Text>Região: {region}</Text>
+              </Td>
+            </Tr>}
+            {item.action=='Payment' && <Tr>
+              <Td p={4} colSpan={4}>
+                  <Text>Valor: {item.data.value}</Text>
+                  <Text>Meio: {item.data.method}</Text>
               </Td>
             </Tr>}
             </>
