@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 
 const getAllLogs = async () => {
     const host = headers().get('host');
-    const protocol = headers().get('x-forwarded-proto');
+    const protocol = host=='localhost:3000'?'http':'https';
     const response = await fetch(`${protocol}://${host}/api/payment?take=1000000`)
     .then((res) => res.json())
     return response;
