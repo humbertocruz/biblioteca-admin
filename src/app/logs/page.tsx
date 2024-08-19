@@ -5,15 +5,20 @@ import dayjs from 'dayjs';
 import { FaDollarSign, FaDownload, FaEye } from 'react-icons/fa';
 import { useState } from "react";
 import PaginationComponent from "../components/pagination";
-import { CSVLink } from "react-csv";
+import { useRecoilState } from "recoil";
+import { dateRangeAtom, filterTipoAtom } from "@/state/atoms";
 
 export default function Home() {
   const [page, setPage] = useState(0)
+  const [dateRange, setDateRange] = useRecoilState(dateRangeAtom);
+  const [filterTipo, setFilterTipo] = useRecoilState(filterTipoAtom);
   const fetcher = (url:string) => fetch(url).then((res) => res.json());
-  const { data, error, isLoading } = useSWR(`/api/logs?page=${page}&take=10`, fetcher);
-  const {data:data_download} = useSWR(`/api/logs?page=0&take=100000`, fetcher);
+  const { data, error, isLoading } = useSWR(`/api/logs?page=${page}&tipo=${filterTipo}&take=10&startDate=${dateRange[0]}&endDate=${dateRange[1]}`, fetcher);
+
   const LogActions = (action:string) => {
     switch (action) {
+      case 'all':
+        return 'Todos'
       case 'Payment':
         return 'Pagamento'
       case 'Consulta':
@@ -27,15 +32,16 @@ export default function Home() {
   return (
     <Box w={'100%'}>
       <Center><Heading my={10}>Logs</Heading></Center>
-      {data_download && <IconButton position={'absolute'} right={2} as={CSVLink}
-        data={data_download.data}
-        //headers={headers}
-        filename={'pagamentos.csv'}
+      <Text>Tipo: {LogActions(filterTipo)}</Text>
+      <Text>De: {dayjs(dateRange[0]).format('DD/MM/YYYY')} - Até: {dayjs(dateRange[1]).format('DD/MM/YYYY')}</Text>
+      <IconButton position={'absolute'} right={2} as={'a'}
+        href={'/downloads/logs'}
+        target="_blank"
         colorScheme="orange"
         size={'sm'}
         aria-label="Exportar"
         icon={<FaDownload />}
-      />}
+      />
       {isLoading ? <Center h={'80vh'}>Carregando...</Center>:
       <Table variant={'striped'}>
         <Thead>

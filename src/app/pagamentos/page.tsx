@@ -30,15 +30,14 @@ export default function Home() {
   return (
     <Box w={'100%'}>
       <Center><Heading my={10}>Pagamentos</Heading></Center>
-      {data && <IconButton position={'absolute'} right={2} as={CSVLink}
-        data={data.data}
-        headers={headers}
-        filename={'pagamentos.csv'}
+      <IconButton position={'absolute'} right={2} as={'a'}
+        href={'/downloads/pagamentos'}
+        target="_blank"
         colorScheme="orange"
         size={'sm'}
         aria-label="Exportar"
         icon={<FaDownload />}
-      />}
+      />
       {isLoading ? <Center h={'80vh'}>Carregando...</Center>:
       <Table variant={'striped'}>
         <Thead>
