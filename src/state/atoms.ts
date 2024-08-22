@@ -23,6 +23,14 @@ const filterTipoAtom = atom({
     key:'filterTipo',
     default:'all'
 })
+const filterSearchAtom = atom({
+    key:'filterSearch',
+    default:'false'
+})
+const filterNomeEmailAssinanteAtom = atom({
+    key:'filterNomeEmailAssinante',
+    default:''
+})
 
 // Busca por perído
 const dateRangeAtom = atom({
@@ -33,4 +41,4 @@ const dateRangeAtom = atom({
     ]
 })
     
-export { tokenAtom, subscriberAtom, filterTipoAtom, dateRangeAtom }
+export { tokenAtom, subscriberAtom, filterTipoAtom, dateRangeAtom, filterSearchAtom, filterNomeEmailAssinanteAtom }

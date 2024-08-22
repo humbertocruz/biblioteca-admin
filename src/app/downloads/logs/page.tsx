@@ -12,6 +12,6 @@ const getAllLogs = async () => {
 export default async function LogDownload () {
     const data = await getAllLogs();
     return (
-        <DownloadLogClient headers={['id']} data={data}/>
+        <DownloadLogClient headers={['createdAt','subscriber.name','region','search']} data={data}/>
     )
 }

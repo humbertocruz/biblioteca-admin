@@ -5,15 +5,18 @@ import dayjs from 'dayjs';
 import { FaDollarSign, FaDownload, FaEye } from 'react-icons/fa';
 import { useState } from "react";
 import PaginationComponent from "../components/pagination";
-import { useRecoilState } from "recoil";
-import { dateRangeAtom, filterTipoAtom } from "@/state/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { dateRangeAtom, filterNomeEmailAssinanteAtom, filterSearchAtom, filterTipoAtom } from "@/state/atoms";
 
 export default function Home() {
   const [page, setPage] = useState(0)
-  const [dateRange, setDateRange] = useRecoilState(dateRangeAtom);
-  const [filterTipo, setFilterTipo] = useRecoilState(filterTipoAtom);
+  const dateRange = useRecoilValue(dateRangeAtom);
+  const filterTipo = useRecoilValue(filterTipoAtom);
+  const filterSearch = useRecoilValue(filterSearchAtom);
+  const filterAssinante = useRecoilValue(filterNomeEmailAssinanteAtom);
+
   const fetcher = (url:string) => fetch(url).then((res) => res.json());
-  const { data, error, isLoading } = useSWR(`/api/logs?page=${page}&tipo=${filterTipo}&take=10&startDate=${dateRange[0]}&endDate=${dateRange[1]}`, fetcher);
+  const { data, error, isLoading } = useSWR(`/api/logs?page=${page}&search=${filterSearch.toString()}&assinante=${filterAssinante.length>2?filterAssinante:''}&tipo=${filterTipo}&take=10&startDate=${dateRange[0]}&endDate=${dateRange[1]}`, fetcher);
 
   const LogActions = (action:string) => {
     switch (action) {
@@ -55,7 +58,8 @@ export default function Home() {
         </Thead>
         <Tbody>
           {data?.data.map((item:any, i:number) => {
-            const { dateRangeStart, dateRangeEnd, region } = item.data
+            const { dateRangeStart, dateRangeEnd, region, search } = JSON.parse(item.data)
+            
             return (
             <>
             <Tr key={'subscriber_'+i}>
@@ -73,6 +77,7 @@ export default function Home() {
               <Td p={4} colSpan={4}>
                   <Text>De: {dayjs(dateRangeStart).format('DD/MM/YYYY HH:mm')} - Até: {dayjs(dateRangeEnd).format('DD/MM/YYYY HH:mm')}</Text>
                   <Text>Região: {region}</Text>
+                  {search && <Text>Código Barras: {search}</Text>}
               </Td>
             </Tr>}
             {item.action=='Payment' && <Tr>

@@ -1,4 +1,4 @@
-import { Box, Button, Center, ChakraProvider, Flex, VStack } from "@chakra-ui/react";
+import { Box, Button, Center, Flex, VStack } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import FiltersLog from "../components/filtersLog";
 
