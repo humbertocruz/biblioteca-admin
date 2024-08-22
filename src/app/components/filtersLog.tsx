@@ -29,8 +29,8 @@ export default function FiltersLog() {
             <Checkbox value={1} onChange={(e)=>setFilterSearch(e.currentTarget.checked.toString())}>Busca por Produto</Checkbox>
             <Text>Período</Text>
             <HStack>
-                <ReactDatePicker withPortal minDate={dayjs('2019-01-01').toDate()} maxDate={dayjs().toDate()} locale={'pt'} dateFormat={'dd/MM/YYYY'} onSelect={(date)=>setDateRange([date||dayjs().startOf('month').toDate(),dateRange[1]])} selected={dateRange[0]} />
-                <ReactDatePicker withPortal minDate={dayjs('2019-01-01').toDate()} maxDate={dayjs().toDate()} locale={'pt'} dateFormat={'dd/MM/YYYY'} onSelect={(date)=>setDateRange([dateRange[0],date||dayjs().toDate()])} selected={dateRange[1]} />
+                <ReactDatePicker onChange={()=>{}} withPortal minDate={dayjs('2019-01-01').toDate()} maxDate={dayjs().toDate()} locale={'pt'} dateFormat={'dd/MM/YYYY'} onSelect={(date)=>setDateRange([date||dayjs().startOf('month').toDate(),dateRange[1]])} selected={dateRange[0]} />
+                <ReactDatePicker onChange={()=>{}} withPortal minDate={dayjs('2019-01-01').toDate()} maxDate={dayjs().toDate()} locale={'pt'} dateFormat={'dd/MM/YYYY'} onSelect={(date)=>setDateRange([dateRange[0],date||dayjs().toDate()])} selected={dateRange[1]} />
             </HStack>
         </VStack>
     )
