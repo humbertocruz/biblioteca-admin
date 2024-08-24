@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 //import { cookies } from 'next/headers'
 import prisma from '../../_prisma'
+import dayjs from 'dayjs'
  
 export async function GET(request: NextRequest, response: NextResponse) {
   //const cookieStore = cookies()
@@ -15,21 +16,17 @@ export async function GET(request: NextRequest, response: NextResponse) {
   const search:any = request.nextUrl.searchParams.get('search')||'false'
   const assinante:any = request.nextUrl.searchParams.get('assinante')
 
-  console.log(search)
-
   const data = await prisma.log.findMany({
     orderBy: {
       createdAt: 'desc'
     },
     where: {
       createdAt: {
-        gte: startDate?new Date(startDate):new Date('2019-01-01'),
+        gte: startDate?new Date(startDate):dayjs().startOf('month').toDate(),
         lte: endDate?new Date(endDate):new Date()
       },
       action: tipo!='all'&&tipo!=undefined?tipo:undefined,
-      data: {
-        contains: search==='true'?'search':undefined
-      },
+      //productId: search?search:undefined,
       subscriber: {
         name: {
           contains: assinante?assinante:undefined
@@ -43,20 +40,25 @@ export async function GET(request: NextRequest, response: NextResponse) {
       createdAt: true,
       subscriber: true,
       action: true,
-      data: true
+      data: true,
+      dateStart: true,
+      dateEnd: true,
+      region: true,
+      productId: true,
+      product: true,
+      payment: true,
+      paymentId: true
     }
   });
   const counter = await prisma.log.count(
     {
       where: {
         createdAt: {
-          gte: startDate?new Date(startDate):new Date('2019-01-01'),
+          gte: startDate?new Date(startDate):dayjs().startOf('month').toDate(),
           lte: endDate?new Date(endDate):new Date()
         },
         action: tipo!='all'&&tipo!=undefined?tipo:undefined,
-        data:{
-          contains: search==='true'?'search':undefined
-        },
+        productId: search?search:undefined,
         subscriber: {
           name: {
             contains: assinante?assinante:undefined

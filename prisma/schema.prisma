@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = "mysql://priceb39_app:}NIkHZOo1C9x@br982.hostgator.com.br:3306/priceb39_app?connection_limit=10&sslmode=require"
 }
 
 model Point {
@@ -42,7 +42,7 @@ model Product {
   group      Group?   @relation(fields: [groupId], references: [id])
   scans      Scan[]
   stars      Star[]
-
+  logs       Log[]
   @@index([groupId], map: "groupId")
 }
 
@@ -127,7 +127,7 @@ model Payment {
   dueDate      DateTime?
   qrcode       String?    @db.Text
   subscriber   Subscriber @relation(fields: [subscriberId], references: [id])
-
+  logs         Log[]
   @@index([subscriberId], map: "Payment_subscriberId_fkey")
 }
 
@@ -275,5 +275,13 @@ model Log {
   data          Json
   subscriber    Subscriber   @relation(fields: [subscriberId], references: [id])
   migration     Boolean   @default(false)
-  @@index([subscriberId, action], map: "subscriberId")
+  skip          Int?
+  region        Region?    @default(DF)
+  dateStart     DateTime?
+  dateEnd       DateTime?
+  productId     String?
+  paymentId     String?
+  product       Product?  @relation(fields: [productId], references: [id])
+  payment       Payment?  @relation(fields: [paymentId], references: [id])
+  @@index([subscriberId, action,region,dateStart,dateEnd,productId,paymentId], map: "subscriberId_action_region_dateStart_dateEnd_productId_paymentId")
 }

@@ -16,7 +16,6 @@ export default function Layout({
       <Center p={2} bg={'gray.300'} h={10} w={'100%'}>Admin Biblioteca de Preços</Center>
       <Flex minH={'100vh'}>
         <Box roundedTopLeft={5} roundedBottomLeft={5} p={2} w={'30%'} bg={'gray.300'}>
-          <Center fontWeight={'bold'} my={4} fontSize={18}>Menu</Center>
           <VStack>
             <Button as={'a'} href="/dashboard" w={'100%'} colorScheme="orange">Dashboard</Button>
             <Button as={'a'} bg={'orange.300'} w={'100%'} colorScheme="orange">Usuários</Button>

@@ -17,7 +17,7 @@ export default function Home() {
 
   const fetcher = (url:string) => fetch(url).then((res) => res.json());
   const { data, error, isLoading } = useSWR(`/api/logs?page=${page}&search=${filterSearch.toString()}&assinante=${filterAssinante.length>2?filterAssinante:''}&tipo=${filterTipo}&take=10&startDate=${dateRange[0]}&endDate=${dateRange[1]}`, fetcher);
-
+  console.log(data)
   const LogActions = (action:string) => {
     switch (action) {
       case 'all':
@@ -58,8 +58,7 @@ export default function Home() {
         </Thead>
         <Tbody>
           {data?.data.map((item:any, i:number) => {
-            const { dateRangeStart, dateRangeEnd, region, search } = JSON.parse(item.data)
-            
+            //const { dateRangeStart, dateRangeEnd, region, search } = JSON.parse(item.data)
             return (
             <>
             <Tr key={'subscriber_'+i}>
@@ -75,9 +74,9 @@ export default function Home() {
             </Tr>
             {item.action=='Consulta' && <Tr>
               <Td p={4} colSpan={4}>
-                  <Text>De: {dayjs(dateRangeStart).format('DD/MM/YYYY HH:mm')} - Até: {dayjs(dateRangeEnd).format('DD/MM/YYYY HH:mm')}</Text>
-                  <Text>Região: {region}</Text>
-                  {search && <Text>Código Barras: {search}</Text>}
+                  <Text>De: {dayjs(item.dateStart).format('DD/MM/YYYY HH:mm')} - Até: {dayjs(item.dateEnd).format('DD/MM/YYYY HH:mm')}</Text>
+                  <Text>Região: {item.region}</Text>
+                  {item.productId && <Text>Código Barras: {item.productId}</Text>}
               </Td>
             </Tr>}
             {item.action=='Payment' && <Tr>
