@@ -19,7 +19,7 @@ export default function Layout({
           <Center fontWeight={'bold'} my={4} fontSize={18}>Menu</Center>
           <VStack>
             <Button as={'a'} href="/dashboard" w={'100%'} colorScheme="orange">Dashboard</Button>
-            <Button as={'a'} href="/usuarios" w={'100%'} colorScheme="orange">Usuários</Button>
+            <Button as={'a'} href="/assinantes" w={'100%'} colorScheme="orange">Assinantes</Button>
             <Button as={'a'} href="/pagamentos" w={'100%'} colorScheme="orange">Pagamentos</Button>
             <Button as={'a'} bg={'orange.300'} w={'100%'} colorScheme="orange">Logs</Button>
           </VStack>

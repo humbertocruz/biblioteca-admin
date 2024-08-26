@@ -12,6 +12,12 @@ export async function GET(request: NextRequest, response: NextResponse) {
       productId: null
     }
   })
+  const count = await prisma.log.count({
+    where: {
+      subscriberId: subscriberId,
+      productId: null
+    }
+  })
 
   const dataProd = await prisma.log.findMany({
     orderBy: {
@@ -42,6 +48,5 @@ export async function GET(request: NextRequest, response: NextResponse) {
       action: 'Payment'
     }
   })
-  console.log(subscriberConsultas)
-  return Response.json({data,dataProd, subscriberLogins,subscriberConsultas,subscriberPagamentos})
+  return Response.json({data,count, dataProd, subscriberLogins,subscriberConsultas,subscriberPagamentos})
 }

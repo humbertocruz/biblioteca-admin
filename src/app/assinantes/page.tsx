@@ -9,7 +9,7 @@ export default function Home() {
   const { data, error, isLoading } = useSWR('/api/subscriber', fetcher);
   return (
     <Box w={'100%'}>
-      <Center><Heading my={10}>Usuários</Heading></Center>
+      <Center><Heading my={10}>Assinantes</Heading></Center>
       {isLoading ? <Center h={'80vh'}>Carregando...</Center>:
       <Table variant={'striped'}>
         <Thead>
@@ -34,7 +34,7 @@ export default function Home() {
               <Td color={dayjs(item.subscription).isAfter(dayjs())?'green':'red'}>{item.subscription?dayjs(item.subscription).format('DD/MM/YYYY'):'xx-xx-xx'}</Td>
               <Td>
                 <HStack>
-                  <IconButton as={'a'} href={`/usuarios/${item.id}/historico`} aria-label="Histórico" colorScheme="orange" size={'sm'} icon={<FaHistory />} />
+                  <IconButton as={'a'} href={`/assinantes/${item.id}/historico`} aria-label="Histórico" colorScheme="orange" size={'sm'} icon={<FaHistory />} />
                 </HStack>
               </Td>
             </Tr>
@@ -42,7 +42,7 @@ export default function Home() {
     })}
         </Tbody>
         <Tfoot>
-          <IconButton as={'a'} href="/usuarios/novo" aria-label="Novo" colorScheme="orange" size={'sm'} icon={<FaPlus />} />
+          <IconButton as={'a'} href="/assinantes/novo" aria-label="Novo" colorScheme="orange" size={'sm'} icon={<FaPlus />} />
         </Tfoot>
       </Table>
       }

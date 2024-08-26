@@ -18,7 +18,7 @@ export default function Layout({
         <Box roundedTopLeft={5} roundedBottomLeft={5} px={2} w={'30%'} bg={'gray.300'}>
           <VStack>
             <Button as={'a'} bg={'orange.300'} w={'100%'} colorScheme="orange">Dashboard</Button>
-            <Button as={'a'} href="/usuarios" w={'100%'} colorScheme="orange">Usuários</Button>
+            <Button as={'a'} href="/assinantes" w={'100%'} colorScheme="orange">Assinantes</Button>
             <Button as={'a'} href="/pagamentos" w={'100%'} colorScheme="orange">Pagamentos</Button>
             <Button as={'a'} href="/logs" w={'100%'} colorScheme="orange">Logs</Button>
           </VStack>
