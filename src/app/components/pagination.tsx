@@ -18,9 +18,9 @@ const PaginationComponent = ({ total, setPage, page, perPage = 10 }) => {
         <Tr>
             <Th colSpan={2}>
                 <HStack>
-                    <IconButton aria-label="Primeira página" colorScheme="orange" size={'sm'} icon={<FaArrowLeft />} />
+                    <IconButton onClick={()=>setPage(page>0?(page-1):0)} aria-label="Primeira página" colorScheme="orange" size={'sm'} icon={<FaArrowLeft />} />
                     {showPageNumbers()}
-                    <IconButton aria-label="Última página" colorScheme={'orange'} size={'sm'} icon={<FaArrowRight />} />
+                    <IconButton onClick={()=>setPage(page<Math.ceil(total/perPage-1)?page+1:Math.ceil(total/perPage-1))} aria-label="Última página" colorScheme={'orange'} size={'sm'} icon={<FaArrowRight />} />
                 </HStack>
             </Th>
             <Th colSpan={1}>{total} registros</Th>

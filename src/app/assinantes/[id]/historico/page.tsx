@@ -1,30 +1,15 @@
 'use client';
+import PaginationComponent from '@/app/components/pagination';
 import { Center, Heading, List, ListItem, Spinner, Table, Th, Td, Tr, VStack } from '@chakra-ui/react';
 import dayjs from 'dayjs';
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import useSWR from 'swr';
-import {
-    Pagination,
-    usePagination,
-    PaginationNext,
-    PaginationPage,
-    PaginationPrevious,
-    PaginationContainer,
-    PaginationPageGroup, } from '@ajna/pagination'
 
 const HistoricoUsuariosPage = ({ params }: { params: { id: string } }) => {
     const fetcher = (url: string) => fetch(url).then((res) => res.json())
     const [page, setPage] = useState(1)
     const {data,error,isLoading} = useSWR(`/api/history?id=${params.id}&page=${page}`,fetcher)   
-    const {
-        currentPage,
-        setCurrentPage,
-        pagesCount,
-        pages
-      } = usePagination({
-        pagesCount: 4,
-        initialState: { currentPage: 1 },
-    });
+
 
 if (!data) return <Center h={'100vh'}>
         <Spinner thickness='4px' size={'xl'} color={'orange.500'} label='Carregando...' />
@@ -38,25 +23,8 @@ if (!data) return <Center h={'100vh'}>
                 <ListItem>Consultas Produto: {data.dataProd.length}</ListItem>
                 <ListItem>Pagamentos: {data.subscriberPagamentos}</ListItem>
             </List>
-                <Pagination
-                    pagesCount={pagesCount}
-                    currentPage={currentPage}
-                    onPageChange={setCurrentPage}
-                >
-                    <PaginationContainer>
-                        <PaginationPrevious>Previous</PaginationPrevious>
-                        <PaginationPageGroup>
-                            {pages.map((page: number) => (
-                            <PaginationPage 
-                                key={`pagination_page_${page}`} 
-                                page={page} 
-                            />
-                            ))}
-                        </PaginationPageGroup>
-                        <PaginationNext>Next</PaginationNext>
-                    </PaginationContainer>
-                </Pagination>
                 <Table>
+                <PaginationComponent total={data?.count} setPage={setPage} page={page} />
                     <Tr>
                         <Th w={100}>Ação</Th>
                         <Th>Data</Th>

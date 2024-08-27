@@ -3,6 +3,7 @@ import prisma from '../../../app/_prisma'
  
 export async function GET(request: NextRequest, response: NextResponse) {
   const subscriberId:any = request.nextUrl.searchParams.get('id')
+  const page:any = request.nextUrl.searchParams.get('page')
   const data = await prisma.log.findMany({
     orderBy: {
       createdAt: 'desc'
@@ -10,7 +11,8 @@ export async function GET(request: NextRequest, response: NextResponse) {
     where: {
       subscriberId: subscriberId,
       productId: null
-    }
+    },
+    skip: (page-1)*10,
   })
   const count = await prisma.log.count({
     where: {
