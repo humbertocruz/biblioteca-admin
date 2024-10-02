@@ -35,6 +35,7 @@ export default function Home() {
               <Td>
                 <HStack>
                   <IconButton as={'a'} href={`/assinantes/${item.id}/historico`} aria-label="Histórico" colorScheme="orange" size={'sm'} icon={<FaHistory />} />
+                  <IconButton as={'a'} href={`/assinantes/${item.id}`} aria-label="Editar" colorScheme="orange" size={'sm'} icon={<FaEdit />} />
                 </HStack>
               </Td>
             </Tr>
