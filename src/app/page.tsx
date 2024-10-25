@@ -1,9 +1,8 @@
-import { Box, Text, Button, Heading } from "@chakra-ui/react";
+import { Button } from "@/components/ui/button";
+import { Box, Heading } from "@chakra-ui/react";
 
 export default function Home() {
   return (
-    <Box w={'100%'}>
-      <Heading>Home</Heading>
-    </Box>
+    <Button as={'a'} href={'/dashboard'}>Hello</Button>
   );
 }

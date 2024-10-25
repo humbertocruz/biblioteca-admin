@@ -8,7 +8,7 @@ import PaginationComponent from "../components/pagination";
 import { CSVLink } from "react-csv";
 import { Head } from "next/document";
 
-export default function Home() {
+export default function Dashboard() {
   const [page, setPage] = useState(0)
   const fetcher = (url:string) => fetch(url).then((res) => res.json());
   const { data, error, isLoading } = useSWR(`/api/logs?page=${page}&take=10`, fetcher);
@@ -28,46 +28,46 @@ export default function Home() {
     <Box w={'100%'}>
       <Center><Heading my={10}>Dashboard</Heading></Center>
       <SimpleGrid columns={2} gap={10}>
-        <Card>
+        <Card.Root>
           <CardHeader>
             <Heading as={'h3'}>Assinantes Ativos</Heading>
           </CardHeader>
           <CardFooter>
             <Text>Assinantes</Text>
           </CardFooter>
-        </Card>
-        <Card>
+        </Card.Root>
+        <Card.Root>
           <CardHeader>
             <Heading as={'h3'}>Assinantes Inativos</Heading>
           </CardHeader>
           <CardFooter>
             <Text>Assinantes</Text>
           </CardFooter>
-        </Card>
-        <Card>
+        </Card.Root>
+        <Card.Root>
           <CardHeader>
             <Heading as={'h3'}>Pagamento Pendente</Heading>
           </CardHeader>
           <CardFooter>
             <Text>Assinantes</Text>
           </CardFooter>
-        </Card>
-        <Card>
+        </Card.Root>
+        <Card.Root>
           <CardHeader>
             <Heading as={'h3'}>Vencimento Próximo</Heading>
           </CardHeader>
           <CardFooter>
             <Text>Assinantes</Text>
           </CardFooter>
-        </Card>
-        <Card>
+        </Card.Root>
+        <Card.Root>
           <CardHeader>
             <Heading as={'h3'}>Valores Recebidos</Heading>
           </CardHeader>
           <CardFooter>
             <Text>Assinantes</Text>
           </CardFooter>
-        </Card>
+        </Card.Root>
       </SimpleGrid>
     </Box>
   );
